@@ -12,7 +12,10 @@ class CelestialBody:
 
 
     def __init__(self, name=None, typ=None, mass=None, k_orbit=None):
-        pass
+        self.name = name
+        self.typ = typs
+        self.mass = mass
+        self.k_orbit = k_orbit
 
 
 
