@@ -6,11 +6,12 @@ class CelestialBody:
     Accepted Attributes:
     name [String] - name of the body
     typ [String] - type (planet, star, asteroid, etc)
+    mass [float] - mass of the body
     k_orbit [KeplerOrbit Obj] - Kepler orbit of object
     """
 
 
-    def __init__(self, name=None, typ=None, k_orbit=None):
+    def __init__(self, name=None, typ=None, mass=None, k_orbit=None):
         pass
 
 

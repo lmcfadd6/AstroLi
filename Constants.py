@@ -27,6 +27,12 @@ class Constants:
 
 class Planets:
     """ An object containing planet constants
+
+    Example:
+    p = Planets()
+    p.Earth.mass
+    >> returns earths mass
+
     """
 
     def __init__(self):
@@ -40,11 +46,11 @@ class Planets:
         URANUS_ORBIT = KeplerOrbit(19.19126393, 0.04716771, 0.76986, O=74.22988, w_tilde=170.96424)
         NEPTUNE_ORBIT = KeplerOrbit(30.06896348, 0.00858587, 1.76917, O=131.72169, w_tilde=44.97135)
 
-        MERCURY = CelestialBody(name="Mercury", typ="Planet", k_orbit=MERCURY_ORBIT)
-        VENUS = CelestialBody(name="Venus", typ="Planet", k_orbit=VENUS_ORBIT)
-        EARTH = CelestialBody(name="Earth", typ="Planet", k_orbit=EARTH_ORBIT)
-        MARS = CelestialBody(name="Mars", typ="Planet", k_orbit=MARS_ORBIT)
-        JUPITER = CelestialBody(name="Jupiter", typ="Planet", k_orbit=JUPITER_ORBIT)
-        SATURN = CelestialBody(name="Saturn", typ="Planet", k_orbit=SATURN_ORBIT)
-        URANUS = CelestialBody(name="Uranus", typ="Planet", k_orbit=URANUS_ORBIT)
-        NEPTUNE = CelestialBody(name="Neptune", typ="Planet", k_orbit=NEPTUNE_ORBIT)
+        MERCURY = CelestialBody(name="Mercury", typ="Planet", mass=3.285e23, k_orbit=MERCURY_ORBIT)
+        VENUS = CelestialBody(name="Venus", typ="Planet", mass=4.867e24, k_orbit=VENUS_ORBIT)
+        EARTH = CelestialBody(name="Earth", typ="Planet", mass=5.97219e24, k_orbit=EARTH_ORBIT)
+        MARS = CelestialBody(name="Mars", typ="Planet", mass=6.39e23, k_orbit=MARS_ORBIT)
+        JUPITER = CelestialBody(name="Jupiter", typ="Planet", mass=1.898e27, k_orbit=JUPITER_ORBIT)
+        SATURN = CelestialBody(name="Saturn", typ="Planet", mass=5.683e26, k_orbit=SATURN_ORBIT)
+        URANUS = CelestialBody(name="Uranus", typ="Planet", mass=8.681e25, k_orbit=URANUS_ORBIT)
+        NEPTUNE = CelestialBody(name="Neptune", typ="Planet", mass=1.024e26, k_orbit=NEPTUNE_ORBIT)
