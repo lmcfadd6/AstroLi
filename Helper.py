@@ -24,6 +24,25 @@ def cart2Radec(cart):
 
     return ra, dec
 
+def radec2UnitVec(ra, dec):
+
+    ''' takes observevd ra and dec, and returns geocentric unit vectors
+    Inputs:
+    ra [Angle Obj] - Right Ascension of object
+    dec [Angle Obj] - Declination of object
+    Retruns:
+    r [Vector3D] - Unit vector of object direction
+    '''
+
+    z = np.sin(dec.rad)
+    y = np.cos(dec.rad)*np.sin(ra.rad)
+    x = np.cos(dec.rad)*np.cos(ra.rad)
+
+    r = Vector3D(x, y, z)
+    # r = r.unitVec()
+
+    return r
+
 def aries2greenwich(cart, JD):
 
     """
@@ -139,24 +158,7 @@ def orbitalElements(mu, r, v):
     # Returns
     return a, e, i, o, f, w
 
-ef radec2UnitVec(ra, dec):
 
-    ''' takes observevd ra and dec, and returns geocentric unit vectors
-    Inputs:
-    ra [Angle Obj] - Right Ascension of object
-    dec [Angle Obj] - Declination of object
-    Retruns:
-    r [Vector3D] - Unit vector of object direction
-    '''
-
-    z = np.sin(dec.rad)
-    y = np.cos(dec.rad)*np.sin(ra.rad)
-    x = np.cos(dec.rad)*np.cos(ra.rad)
-
-    r = Vector3D(x, y, z)
-    # r = r.unitVec()
-
-    return r
 
 def cunninghamFrame(p1, p2, p3):
 
@@ -278,9 +280,6 @@ def jd2f(jd, mu, k_orbit, verbose=False):
     '''
 
     M = jd2M(jd, mu, k_orbit)
-
-    if verbose:
-        print("M", np.degrees(M))
 
     E = M2E(M, k_orbit)
 

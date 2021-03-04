@@ -367,6 +367,7 @@ class KeplerOrbit:
 
     def orbit2HeliocentricState(self, mu, f, no_rotate=False, back=False):
         """ Rotate state vectors of position and velocity to heliocentric ecliptic plane
+        For opposite operation, see Helper.orbitalElements
         Inputs:
         k_orbit [KeplerOrbit Obj] - orbital parameters to convert and rotate
         mu [Float] - Standard Gravtiational Parameter of the orbit
