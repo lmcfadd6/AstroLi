@@ -1,5 +1,10 @@
 import numpy as np
 
+from bin.Helper import *
+from bin.Constants import Constants
+
+c = Constants()
+
 class CelestialBody:
     """ An object storing parameters of a celestial body
     
@@ -22,6 +27,29 @@ class CelestialBody:
         A += str(self.k_orbit)
         return A
 
+    def status(self, jd, write=False):
+        ''' Given the jd, returns true anomally, and status vectors
+
+        Arguments:
+        jd [float] - julian day
+        print [Boolean] - switch to print out results
+        '''
+
+        # Note: might not be good to assume m_2 is the sun, but works for now
+        mu = c.G*(1 + self.mass)
+        f = jd2f(jd, mu, self.k_orbit)
+        r, v = self.k_orbit.orbit2HeliocentricState(mu, f)
+
+        if write:
+            print(self)
+            print("[jd] = {:} days".format(jd))
+            print("[\u03BC] = {:.2E} AU^3 yr^-2".format(mu))
+            print("[f] = {:.2f} rad".format(f.rad))
+            print("State Vectors:")
+            print('r', r, 'AU')
+            print('v', v*(1/c.days_per_year), 'AU/d')
+
+        return f, mu, r, v
 
 
 class Vector3D:
@@ -87,9 +115,9 @@ class Vector3D:
     def __str__(self):
         mag = self.mag()
         if mag == 1.0:
-            return 'Unit Vector: [ {:.4f}, {:.4f}, {:.4f}]'.format(self.x, self.y, self.z)
+            return 'Unit Vector: [ {:.8f}, {:.8f}, {:.8f}]'.format(self.x, self.y, self.z)
         else:
-            return 'Vector: [ {:.4f}, {:.4f}, {:.4f}]'.format(self.x, self.y, self.z)
+            return 'Vector: [ {:.8f}, {:.8f}, {:.8f}]'.format(self.x, self.y, self.z)
 
     def mag(self):
         """ Returns the geometric magnitude of the vector
@@ -224,6 +252,7 @@ class Angle:
             return True
         return False
 
+
 class RightAsc:
 
     """ Quick object to convert an angle in degrees to a right ascension
@@ -269,7 +298,7 @@ class KeplerOrbit:
     """
 
 
-    def __init__(self, a, e, i, O=None, w=None, w_tilde=None):
+    def __init__(self, a, e, i, O=None, w=None, w_tilde=None, L=None):
 
         self.a = a
         self.e = e
@@ -277,6 +306,7 @@ class KeplerOrbit:
         self.O = Angle(O, deg=True)
         self.w = Angle(w, deg=True)
         self.w_tilde = Angle(w_tilde, deg=True)
+        self.L = Angle(L, deg=True)
 
         # If w is not given, calculate through w_tilde = O + w
         if self.w.isNone() and not(self.O.isNone() or self.w_tilde.isNone()):
@@ -308,7 +338,7 @@ class KeplerOrbit:
 
         f = Angle(f)
 
-        E = np.arctan2(np.tan(f.rad/2),np.sqrt((1 + self.e)/(1 - self.e)))*2
+        E = np.arctan(np.tan(f.rad/2)/np.sqrt((1 + self.e)/(1 - self.e)))*2
 
         E = Angle(E)
 
@@ -352,7 +382,6 @@ class KeplerOrbit:
 
         a = self.a
         e = self.e
-        f = Angle(f)
 
         # Helper variables
         n = np.sqrt(mu/a**3)
@@ -368,8 +397,8 @@ class KeplerOrbit:
         v_y = a*np.sqrt(1 - e**2)*n*np.cos(E.rad)/(1 - e*np.cos(E.rad))
         v_z = 0
 
-        r = Cart(x, y, z)
-        v = Cart(v_x, v_y, v_z)
+        r = Vector3D(x, y, z)
+        v = Vector3D(v_x, v_y, v_z)
 
         return r, v
 

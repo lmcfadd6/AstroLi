@@ -3,7 +3,11 @@
 
 
 import numpy as np
-from AstroLi import *
+
+from bin.classes.AstroLi import *
+from bin.Constants import Constants
+
+c = Constants()
 
 def cart2Radec(cart):
 
@@ -210,13 +214,12 @@ def jd2M(jd, mu, k_orbit):
     Outputs:
     M [float] - Mean anomaly at given jd in radians
     '''
-    
-    L = np.radians(100.46435)
+
     jd_2000 = 2451545.0
 
     n = np.sqrt(mu/k_orbit.a**3)
 
-    M_2000 = L - k_orbit.O.rad - k_orbit.w.rad
+    M_2000 = k_orbit.L.rad - k_orbit.O.rad - k_orbit.w.rad
     M = (M_2000 + n*(jd - jd_2000)/c.days_per_year)%(2*np.pi)
 
     return M
@@ -280,11 +283,11 @@ def jd2f(jd, mu, k_orbit, verbose=False):
     '''
 
     M = jd2M(jd, mu, k_orbit)
-
+    print("M", M)
     E = M2E(M, k_orbit)
-
+    print("E", E)
     f = k_orbit.eE2f(E)
-
+    print("f", f.rad)
     return f
 
 def myfunctionF(mu, r_0, t, t_0):
