@@ -1,5 +1,5 @@
 import numpy as np
-from AstroLi import CelestialBody
+from bin.classes.AstroLi import CelestialBody, KeplerOrbit
 
 class Constants:
     """ An object defining constants
@@ -46,11 +46,24 @@ class Planets:
         URANUS_ORBIT = KeplerOrbit(19.19126393, 0.04716771, 0.76986, O=74.22988, w_tilde=170.96424)
         NEPTUNE_ORBIT = KeplerOrbit(30.06896348, 0.00858587, 1.76917, O=131.72169, w_tilde=44.97135)
 
-        MERCURY = CelestialBody(name="Mercury", typ="Planet", mass=3.285e23, k_orbit=MERCURY_ORBIT)
-        VENUS = CelestialBody(name="Venus", typ="Planet", mass=4.867e24, k_orbit=VENUS_ORBIT)
-        EARTH = CelestialBody(name="Earth", typ="Planet", mass=5.97219e24, k_orbit=EARTH_ORBIT)
-        MARS = CelestialBody(name="Mars", typ="Planet", mass=6.39e23, k_orbit=MARS_ORBIT)
-        JUPITER = CelestialBody(name="Jupiter", typ="Planet", mass=1.898e27, k_orbit=JUPITER_ORBIT)
-        SATURN = CelestialBody(name="Saturn", typ="Planet", mass=5.683e26, k_orbit=SATURN_ORBIT)
-        URANUS = CelestialBody(name="Uranus", typ="Planet", mass=8.681e25, k_orbit=URANUS_ORBIT)
-        NEPTUNE = CelestialBody(name="Neptune", typ="Planet", mass=1.024e26, k_orbit=NEPTUNE_ORBIT)
+        # Masses of planets given in 1/M_Sun
+        MERCURY_MASS = 6023600
+        VENUS_MASS = 408523.71
+        EARTH_MASS = 332946.050895
+        MARS_MASS =  3098708
+        JUPITER_MASS = 1047.3486
+        SATURN_MASS =  3497.898
+        URANUS_MASS =  22902.98
+        NEPTUNE_MASS =  19412.24
+        PLUTO_MASS = 1.352e8
+        MOON_MASS = 27068700.387534
+        SUN_MASS = 1.0
+
+        self.MERCURY =   CelestialBody(name="Mercury",   typ="Planet", mass=1/MERCURY_MASS,   k_orbit=MERCURY_ORBIT)
+        self.VENUS =     CelestialBody(name="Venus",     typ="Planet", mass=1/VENUS_MASS,   k_orbit=VENUS_ORBIT)
+        self.EARTH =     CelestialBody(name="Earth",     typ="Planet", mass=(1/EARTH_MASS + 1/MOON_MASS),   k_orbit=EARTH_ORBIT)
+        self.MARS =      CelestialBody(name="Mars",      typ="Planet", mass=1/MARS_MASS,   k_orbit=MARS_ORBIT)
+        self.JUPITER =   CelestialBody(name="Jupiter",   typ="Planet", mass=1/JUPITER_MASS,   k_orbit=JUPITER_ORBIT)
+        self.SATURN =    CelestialBody(name="Saturn",    typ="Planet", mass=1/SATURN_MASS,   k_orbit=SATURN_ORBIT)
+        self.URANUS =    CelestialBody(name="Uranus",    typ="Planet", mass=1/URANUS_MASS,   k_orbit=URANUS_ORBIT)
+        self.NEPTUNE =   CelestialBody(name="Neptune",   typ="Planet", mass=1/NEPTUNE_MASS,   k_orbit=NEPTUNE_ORBIT)
