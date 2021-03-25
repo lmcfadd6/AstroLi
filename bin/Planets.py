@@ -23,6 +23,7 @@ class Planets:
         URANUS_ORBIT = KeplerOrbit(19.19126393, 0.04716771, 0.76986, O=74.22988, w_tilde=170.96424, L=313.23218)
         NEPTUNE_ORBIT = KeplerOrbit(30.06896348, 0.00858587, 1.76917, O=131.72169, w_tilde=44.97135, L=304.88003)
         PLUTO_ORBIT = KeplerOrbit(39.48168677, 0.24880766, 17.14175, O=110.30347, w_tilde=224.06676, L=238.92881)
+        SUN_ORBIT = KeplerOrbit(0, 0, 0, 0, 0, 0)
 
         # Masses of planets given in 1/M_Sun
         MERCURY_MASS = 6023600
@@ -46,3 +47,4 @@ class Planets:
         self.URANUS =    CelestialBody(name="Uranus",    typ="Planet", mass=1/URANUS_MASS,   k_orbit=URANUS_ORBIT)
         self.NEPTUNE =   CelestialBody(name="Neptune",   typ="Planet", mass=1/NEPTUNE_MASS,   k_orbit=NEPTUNE_ORBIT)
         self.PLUTO =     CelestialBody(name="Pluto",     typ="Dwarf" , mass=1/PLUTO_MASS, k_orbit=PLUTO_ORBIT)
+        self.SUN =       CelestialBody(name="Sun",       typ="Star"  , mass=1/SUN_MASS, k_orbit=SUN_ORBIT)

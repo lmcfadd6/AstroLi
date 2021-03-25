@@ -37,6 +37,12 @@ class CelestialBody:
 
         # Note: might not be good to assume m_2 is the sun, but works for now
         mu = c.G*(1 + self.mass)
+
+        if self.k_orbit.a == 0:
+            r = Vector3D(0, 0, 0)
+            v = Vector3D(0, 0, 0)
+            return self.mass, r, v
+
         f = jd2f(jd, mu, self.k_orbit)
         r, v = self.k_orbit.orbit2HeliocentricState(mu, f)
 
@@ -49,7 +55,7 @@ class CelestialBody:
             print('r', r, 'AU')
             print('v', v*(1/c.days_per_year), 'AU/d')
 
-        return f, mu, r, v
+        return self.mass, r, v
 
 
 class Vector3D:

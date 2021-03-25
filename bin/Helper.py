@@ -283,11 +283,11 @@ def jd2f(jd, mu, k_orbit, verbose=False):
     '''
 
     M = jd2M(jd, mu, k_orbit)
-    print("M", M)
+
     E = M2E(M, k_orbit)
-    print("E", E)
+
     f = k_orbit.eE2f(E)
-    print("f", f.rad)
+
     return f
 
 def myfunctionF(mu, r_0, t, t_0):
