@@ -1,30 +1,25 @@
+########## Imports
 from vpython import *
 
 import numpy as np
 
 from bin.Constants import Constants
 from bin.Planets import Planets
+###################
 
 #GlowScript 3.0 VPython
-
 # Stars interacting gravitationally
-
 # Bruce Sherwood
 
-## Screen size in browser
-scene.width = scene.height = 600
+### Browser Parameters
+scene.width = scene.height = 800
 
 # Display text below the 3D graphics:
-scene.title = "Stars interacting gravitationally"
+scene.title = "Our Solar System"
+scene.caption = """"""
 
-scene.caption = """To rotate "camera", drag with right button or Ctrl-drag.
-To zoom, drag with middle button or Alt/Option depressed, or use scroll wheel.
-  On a two-button mouse, middle is left + right.
-To pan left/right and up/down, Shift-drag.
-Touch screen: pinch/extend to zoom, swipe or two-finger rotate.
 
-Replot the web page to restart with different (random) initial conditions."""
-
+### Import Planet Values
 p = Planets()
 
 jd = 2451545.000000
@@ -34,7 +29,7 @@ Nstars = len(planets)
 
 # Natural Units:
 # Length: AU
-# Time:   JD
+# Time:   JY
 # Mass:   M_Sun
 
 # Constants
@@ -42,13 +37,14 @@ G = 4*np.pi**2
 Msun = 1
 Rsun = 0.05
 
-# Lines length
+# Lines length - L is a characteristic length to scale scene, axes, and simulation off of
 L = 1
 
 scene.range = 2*L
 scene.forward = vec(-1,-1,-1)
+###############################
 
-# # Define 3D axes
+####### Define 3D axes (Erased for clarity)
 # xaxis = curve(color=color.gray(0.5), radius=3e8)
 # xaxis.append(vec(0,0,0))
 # xaxis.append(vec(L,0,0))
@@ -64,10 +60,11 @@ star_colors = [color.red, color.green, color.blue,
               color.yellow, color.cyan, color.magenta]
 
 
-
+### Input planet parameters
 mas_list = []
 pos_list = []
 vel_list = []
+# I had to make the outer planets larger so they were visible, here's a scaling factor
 rad_list = [1, 1, 1, 1, 1, 2, 3, 4, 5, 6]
 
 for planet in planets:
@@ -75,20 +72,23 @@ for planet in planets:
     mas_list.append(m)
     pos_list.append(vec(r.x, r.y, r.z))
     vel_list.append(vec(v.x, v.y, v.z))
+########################################
 
-
-### This loop initializes the stars, this is where the parameters from the actual solar system go
+### This loop initializes the stars, this is where the initial parameters from the actual solar system go
 psum = vec(0,0,0)
 for i in range(Nstars):
     # Make sphere with initial position
+    # Retain - how long to keep tail
+    # trail_radius, size of the trail
+    
     star = sphere(pos=pos_list[i], make_trail=True, retain=1500, trail_radius=0.01*rad_list[i])
     R = Rsun
     star.radius = R*rad_list[i]
-    # Program guesses mass from size (this will be changed with actual mass)
-    star.mass = mas_list[i]
 
-    # Random momentum assinged (this will also be changed)
+    star.mass = mas_list[i]
     star.momentum = mas_list[i]*vel_list[i]
+
+    # Assign colors from list (loop over)
     star.color = star.trail_color = star_colors[i % 6]
     Stars.append( star )
     # Total momentum of the system
@@ -100,7 +100,7 @@ for i in range(Nstars):
 # for i in range(Nstars):
 #     Stars[i].momentum = Stars[i].momentum - psum/Nstars
 
-dt = (88/365)*0.01*0.01 # <- Thanks Cole!
+dt = (88/365)*0.01 # <- Thanks Cole! So that 1% of Mercury orbit is timestep
 hitlist = []
 
 def computeForces():
@@ -125,9 +125,10 @@ def computeForces():
             rmag2 = mag2(r)
             if rmag2 <= (radius+sj.radius)**2: hitlist.append([i,j])
             # Calculate force (rmag2 is r^2, rmag2^1.5 is r^3, so we get r/r^3)
+            # Standard Newton force
             F = F + (G*m1*sj.mass/(rmag2**1.5))*r
 
-        # Change momentum vector
+        # Change momentum vector - Euler's integration here too
         si.momentum = si.momentum + F*dt
 
 
@@ -135,7 +136,7 @@ def computeForces():
 while True:
 
     # Rate of viewing (not timestep)
-    rate(100000)
+    rate(1000)
     
     # Compute all forces on all stars
     computeForces()
@@ -151,6 +152,7 @@ while True:
     # If any collisions took place, merge those stars
     hit = len(hitlist)-1
 
+    ### My code would get stuck in this loop for some reason, since we don't need collision, I just omitted this section
     # # Collisions take place here
     # while hit > 0:
     #     s1 = Stars[hitlist[hit][0]]
