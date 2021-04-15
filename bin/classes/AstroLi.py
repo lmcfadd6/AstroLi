@@ -301,10 +301,11 @@ class KeplerOrbit:
     w_tilde [Float] - Longitude of perihelion [Degrees]
     If w is not given, w may be calculated from O and w_tilde by:
         w_tilde = O + w
+    M [Float] - Mean Anomally, [Degrees]
     """
 
 
-    def __init__(self, a, e, i, O=None, w=None, w_tilde=None, L=None):
+    def __init__(self, a, e, i, O=None, w=None, w_tilde=None, L=None, M=None):
 
         self.a = a
         self.e = e
@@ -313,10 +314,14 @@ class KeplerOrbit:
         self.w = Angle(w, deg=True)
         self.w_tilde = Angle(w_tilde, deg=True)
         self.L = Angle(L, deg=True)
+        self.M = Angle(M, deg=True)
 
         # If w is not given, calculate through w_tilde = O + w
         if self.w.isNone() and not(self.O.isNone() or self.w_tilde.isNone()):
             self.w = self.w_tilde - self.O
+
+        if self.L.isNone() and not(self.O.isNone() or self.w.isNone() or self.M.isNone()):
+            self.L = self.O + self.w + self.M + Angle(90, deg=True)
 
 
     def __str__(self):

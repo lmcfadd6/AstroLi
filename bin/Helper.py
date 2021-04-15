@@ -83,7 +83,7 @@ def jd2Angle(jd):
 
     return theta
 
-def orbitalElements(mu, r, v):
+def orbitalElements(mu, r, v, write=True):
     """ Transforms a rotating body state vectors into Keplarian Orbital parameters
     All units are given in AU, yrs, Solar Masses, and degrees
     Inputs:
@@ -103,15 +103,18 @@ def orbitalElements(mu, r, v):
 
     # no mass -> no orbiting!
     if mu == 0:
-        print("[ERROR] Standard Gravitational Mass cannot be 0!")
+        if write:
+            print("[ERROR] Standard Gravitational Mass cannot be 0!")
         return None, None, None, None, None, None
 
     if r.mag() == 0:
-        print("[ERROR] r can not be a zero vector!")
+        if write:
+            print("[ERROR] r can not be a zero vector!")
         return None, None, None, None, None, None
     
     if 2/r.mag() <= v.mag()**2/mu:
-        print("[ERROR] Orbit is no longer elliptical")
+        if write:
+            print("[ERROR] Orbit is no longer elliptical")
         return None, None, None, None, None, None
         
     # angular momentum per unit mass
@@ -123,40 +126,48 @@ def orbitalElements(mu, r, v):
     e = np.sqrt(1 - h.mag()**2/mu/a)
     i = np.arctan2(np.sqrt(h.x**2 + h.y**2), h.z)
 
-    print("[a] = {:.4f} AU".format(a))
-    print("[e] = {:.4f}".format(e))
-    print("[i] = {:.4f}°".format(np.degrees(i)%360))
+    if write:
+        print("[a] = {:.4f} AU".format(a))
+        print("[e] = {:.4f}".format(e))
+        print("[i] = {:.4f}°".format(np.degrees(i)%360))
     #######################
 
     # Case 1: Inclination is 0
     if i == 0:
         # o doesn't make any sense, since it doesn't go above the plane
         o = None
-        print("[\u03A9] is undefined")
+        if write:
+            print("[\u03A9] is undefined")
     else:
-        o = np.arctan2(h.x, -h.y)
-        print("[\u03A9] = {:.2f}°".format(np.degrees(o)%360))
+        o = np.degrees(np.arctan2(h.x, -h.y))
+        if write:
+            print("[\u03A9] = {:.2f}°".format(np.degrees(o)%360))
 
     # Case 2: Eccentricity is 0
     if e == 0:
         # w doesn't make sense if there is no closest point
-        print("[WARNING] e is exactly 0!")
+        if write:
+            print("[WARNING] e is exactly 0!")
         f = None
         w = None
-        print("[f] is undefined")
-        print("[\u03C9] is undefined")
+        if write:
+            print("[f] is undefined")
+            print("[\u03C9] is undefined")
         
     else:
-        f = np.arctan2(r.dot(v)*h.mag(), h.mag()**2 - mu*r.mag())
-        print("[f] = {:.4f}°".format(np.degrees(f)%360))
+        f = np.degrees(np.arctan2(r.dot(v)*h.mag(), h.mag()**2 - mu*r.mag()))
+        if write:
+            print("[f] = {:.4f}°".format(np.degrees(f)%360))
 
         # Case 3: Inclinaion is 0, but f is calculated first
         if i == 0:
             w = None
-            print("[\u03C9] is undefined")
+            if write:
+                print("[\u03C9] is undefined")
         else:
-            w = np.arctan2(r.z*h.mag()/np.sqrt(h.x**2 + h.y**2), r.x*np.cos(o) + r.y*np.sin(o)) - f
-            print("[\u03C9] = {:.4f}°".format(np.degrees(w)%360))
+            w = np.degrees(np.arctan2(r.z*h.mag()/np.sqrt(h.x**2 + h.y**2), r.x*np.cos(o) + r.y*np.sin(o)) - f)
+            if write:
+                print("[\u03C9] = {:.4f}°".format(np.degrees(w)%360))
         
 
     # Returns
