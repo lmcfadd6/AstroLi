@@ -36,8 +36,14 @@ for line in data:
 
 	a, e, i, o, f, w = orbitalElements(mu, r, v, write=False)
 
-	o = o%360
-	w = w%360
+	try:
+		o = o%360
+	except TypeError:
+		o = None
+	try:
+		w = w%360
+	except TypeError:
+		w = None
 
 	if obj == 1:
 		jupiter_data.append([a, e, i, o, w, f])
@@ -83,15 +89,15 @@ labels = ["Semimajor Axis, a [AU]", "Eccentricity, e", "Inclination, i, [deg]", 
 
 t = np.repeat(np.arange(0, len(jupiter_data), 1)*dt, obj-5)
 
-for i in range(5):
-	plt.subplot(3, 2, i+1)
-	plt.scatter(t[:10000], jt_data[:10000, i], label="Trojans")
-	# plt.plot(dt, jupiter_data[:, i], label="Jupiter")
-	plt.xlabel("Time [yrs]")
-	plt.ylabel(labels[i])
-	plt.legend()
+# for i in range(5):
+# 	plt.subplot(3, 2, i+1)
+# 	plt.scatter(t, jt_data[:, i], label="Trojans")
+# 	# plt.plot(dt, jupiter_data[:, i], label="Jupiter")
+# 	plt.xlabel("Time [yrs]")
+# 	plt.ylabel(labels[i])
+# 	plt.legend()
 
-plt.show()
+# plt.show()
 
 # plt.plot(t, r_jupiter, label="Jupiter")
 # plt.plot(t, r_hektor, label="Hektor")
@@ -99,15 +105,15 @@ plt.show()
 # plt.ylabel("Distance from the Sun [AU]")
 # plt.legend()
 # plt.show()
-# dif = []
+dif = []
 # for rr in range(len(r_jupiter)):
-# 	az_j = np.arctan2(r_jupiter[rr].x, r_jupiter[rr].y)
-# 	for i in range(10):
-# 		az_h = np.arctan2(r_hektor[10*rr + i].x, r_hektor[10*rr + i].y)
+az_j = np.arctan2(r_jupiter[-1].x, r_jupiter[-1].y)
+for i in range(100):
+	az_h = np.arctan2(r_hektor[-1 - i].x, r_hektor[-1 - i].y)
 
-# 		dif.append(np.degrees(az_j - az_h)%360)
+	dif.append(np.degrees(az_j - az_h)%360)
 
-# plt.scatter(t, dif)
-# plt.xlabel("Time [yrs]")
-# plt.ylabel("Angular Separation [deg]")
-# plt.show()
+plt.hist(dif, bins=18)
+plt.xlabel("Angular Separation [deg]")
+plt.ylabel("Number of Asteroids/100")
+plt.show()
